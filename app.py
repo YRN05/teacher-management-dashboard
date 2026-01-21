@@ -8,9 +8,23 @@ st.set_page_config(page_title='Score Management', layout='wide', initial_sidebar
 st.title("Welcome")
 st.header("Your Personal Student's Score Manager")
 st.write("\n")
-st.subheader("How it works?")
-st.markdown("Bapak/Ibu Dosen bisa memasukkan file xlsx ke dalam field **'Upload File'** dengan format file seperti ini")
-st.image("images/format-data.png", caption="Contoh Format Kolom")
+with st.expander("Cara Penggunaan"):
+    st.subheader("How it works?")
+    st.markdown("Bapak/Ibu Dosen bisa memasukkan file xlsx ke dalam field **'Upload File'** dengan format file seperti ini")
+    st.image("images/format-data.png", caption="Contoh Format Kolom")
+
+    st.markdown("Atau silahkan download template dibawah ini")
+    try:
+        with open("assets/template_mahasiswa.xlsx", "rb") as file:
+            st.download_button(
+                label="📥 Download Template Excel",
+                data=file,
+                file_name="template_mahasiswa.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+    except FileNotFoundError:
+        st.error("File template tidak ditemukan di folder assets.")
+
 st.write('\n')
 st.divider()
 
@@ -34,7 +48,7 @@ if uploaded_file is not None:
             
             st.subheader("📝 Statistik Deskriptif")
             df_stats = calculate_stats(df, target_col)
-            st.table(df_stats)
+            st.table(df_stats.style.format({"Nilai": "{:.2f}"}))
             
             st.divider()
             
